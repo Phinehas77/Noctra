@@ -405,53 +405,56 @@ export const WatchPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 4 Dedicated Streaming Sources (3, 6, 11, 12) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {PLAYER_SOURCES.map((source) => {
-              const isActive = activePlayerId === source.id;
-              return (
+          {/* Player source status: no third-party stream providers are configured */}
+          {PLAYER_SOURCES.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {PLAYER_SOURCES.map((source) => {
+                const isActive = activePlayerId === source.id;
+                return (
+                  <button
+                    key={source.id}
+                    onClick={() => {
+                      setActivePlayerId(source.id);
+                      setIsIframeLoading(true);
+                    }}
+                    className={`group relative flex items-center justify-between p-2 sm:px-3 sm:py-2 rounded-xl border transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-gradient-to-r from-[#FF5500] via-[#EE1520] to-[#C90712] text-white border-transparent shadow-lg shadow-[#E50914]/30'
+                        : 'bg-[#17191F]/90 text-zinc-300 hover:text-white hover:bg-[#20242E] border-white/10'
+                    }`}
+                    title={`${source.name} - ${source.badge}`}
+                  >
+                    <span className="font-display font-bold text-xs truncate">{source.name}</span>
+                    <span className="text-[9px] font-tech uppercase tracking-wider">{source.badge}</span>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-white/10 bg-[#111318] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-white">No streaming provider is connected</p>
+                <p className="text-xs text-[#A3A6B0] mt-1">You can play the official trailer or add a direct video URL you have permission to use.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
                 <button
-                  key={source.id}
                   onClick={() => {
-                    setActivePlayerId(source.id);
+                    setActivePlayerId('trailer');
                     setIsIframeLoading(true);
                   }}
-                  className={`group relative flex items-center justify-between p-2 sm:px-3 sm:py-2 rounded-xl border transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-gradient-to-r from-[#FF5500] via-[#EE1520] to-[#C90712] text-white border-transparent shadow-lg shadow-[#E50914]/30 scale-[1.01]'
-                      : 'bg-[#17191F]/90 text-zinc-300 hover:text-white hover:bg-[#20242E] border-white/10 hover:border-white/20'
-                  }`}
-                  title={`${source.name} - ${source.badge}`}
+                  className="px-3 py-2 rounded-lg bg-[#FF5500] hover:bg-[#E50914] text-white text-xs font-semibold"
                 >
-                  <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                    <span
-                      className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-tech font-bold flex-shrink-0 transition-colors ${
-                        isActive
-                          ? 'bg-white text-black shadow-sm'
-                          : 'bg-white/10 text-white group-hover:bg-[#FF5500] group-hover:text-white'
-                      }`}
-                    >
-                      {source.num}
-                    </span>
-                    <div className="flex flex-col text-left min-w-0">
-                      <span className="font-display font-bold text-[11px] sm:text-xs truncate">
-                        {source.name}
-                      </span>
-                    </div>
-                  </div>
-                  <span
-                    className={`text-[8px] sm:text-[9px] font-tech font-bold uppercase tracking-wider px-1.5 py-0.5 rounded flex-shrink-0 ml-1 ${
-                      isActive
-                        ? 'bg-black/35 text-white'
-                        : 'bg-white/5 text-zinc-400 border border-white/5 hidden xs:inline'
-                    }`}
-                  >
-                    {source.badge}
-                  </span>
+                  <Film className="w-3.5 h-3.5 inline mr-1.5" /> Official Trailer
                 </button>
-              );
-            })}
-          </div>
+                <button
+                  onClick={() => setShowCustomModal(true)}
+                  className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold"
+                >
+                  <Sparkles className="w-3.5 h-3.5 inline mr-1.5" /> Add Video URL
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -504,20 +507,14 @@ export const WatchPage: React.FC = () => {
                   </div>
                   <h3 className="text-lg font-bold text-white mb-2">No Direct Stream Configured</h3>
                   <p className="text-xs text-[#A3A6B0] mb-4">
-                    Switch to any of the 4 dedicated streaming servers above to watch immediately, or configure a custom MP4/HLS URL.
+                    No streaming provider is connected yet. Add a direct MP4 or browser-compatible HLS URL that you own or are authorized to use.
                   </p>
                   <div className="flex items-center justify-center gap-3">
                     <button
-                      onClick={() => setActivePlayerId('player3')}
+                      onClick={() => setShowCustomModal(true)}
                       className="px-4 py-2 rounded-lg bg-[#FF5500] hover:bg-[#E50914] text-white text-xs font-semibold cursor-pointer"
                     >
-                      Switch to Player 3 (VidSrc PM)
-                    </button>
-                    <button
-                      onClick={() => setShowCustomModal(true)}
-                      className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold cursor-pointer"
-                    >
-                      Set Custom URL
+                      Add Video URL
                     </button>
                   </div>
                 </div>
