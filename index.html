@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CINEMORA — Your Next Obsession Starts Here</title>
+    <meta name="description" content="CINEMORA — Premium cinematic movie and TV discovery and streaming platform inspired by ANITIME and Netflix." />
+    <meta property="og:title" content="CINEMORA — Your Next Obsession Starts Here" />
+    <meta property="og:description" content="CINEMORA — Premium cinematic movie and TV discovery and streaming platform inspired by ANITIME and Netflix." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M8 12 C16 20 22 30 26 44 L26 94 C20 98 14 100 10 102 L38 98 L38 42 C32 32 20 20 8 12 Z' fill='%23E2E8F0'/%3E%3Cpath d='M74 12 L90 12 L90 76 C94 84 100 90 108 94 C96 95 86 90 80 84 L74 78 Z' fill='%23CBD5E1'/%3E%3Cpolygon points='26,26 46,16 86,84 66,94' fill='%23475569'/%3E%3Cpath d='M26 20 L86 94' stroke='%23FF2200' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M26 20 L86 94' stroke='%23FFF3D6' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      // Ensure window.fetch has a setter so browser extensions and network interceptors can reassign fetch without throwing
+      (function() {
+        try {
+          var _currentFetch = window.fetch ? window.fetch.bind(window) : undefined;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return _currentFetch;
+            },
+            set: function(val) {
+              _currentFetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          // ignore if already configured
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-[#08090C] text-[#F7F7F8] antialiased selection:bg-[#E50914] selection:text-white min-h-screen overflow-x-hidden">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

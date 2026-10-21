@@ -1,0 +1,6 @@
+{
+  "name": "CINEMORA",
+  "description": "Your next obsession starts here. Premium cinematic movie and TV discovery and streaming platform inspired by ANITIME and Netflix.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
