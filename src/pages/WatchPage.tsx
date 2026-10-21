@@ -265,7 +265,11 @@ export const WatchPage: React.FC = () => {
   };
 
   const title = details?.title || details?.name || 'Now Playing';
-  const activeSource = ALL_SOURCES.find((p) => p.id === activePlayerId) || EXTRA_SOURCES[0];
+  const selectedSource = ALL_SOURCES.find((p) => p.id === activePlayerId) || EXTRA_SOURCES[0];
+  const isDirectVideoUrl = /\\.(mp4|webm|m3u8)(\\?.*)?$/i.test(customStreamUrl);
+  const activeSource = activePlayerId === 'custom-embed' && isDirectVideoUrl
+    ? { ...selectedSource, type: 'html5' as const }
+    : selectedSource;
 
   // Resolve active stream URL based on player
   let activeEmbedUrl = '';
