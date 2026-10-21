@@ -44,52 +44,7 @@ interface PlayerSource {
   getUrl: (id: string | number, type: 'movie' | 'tv', season: number, episode: number) => string;
 }
 
-export const PLAYER_SOURCES: PlayerSource[] = [
-  {
-    id: 'player3',
-    num: 3,
-    name: 'Player 3 (VidSrc PM)',
-    badge: 'Mirror HD',
-    type: 'embed',
-    getUrl: (id, type, season, episode) =>
-      type === 'movie'
-        ? `https://vidsrc.pm/embed/movie/${id}`
-        : `https://vidsrc.pm/embed/tv/${id}/${season}/${episode}`,
-  },
-  {
-    id: 'vidzee',
-    num: 6,
-    name: 'Vidzee (Player 6)',
-    badge: 'Cloud HD',
-    type: 'embed',
-    getUrl: (id, type, season, episode) =>
-      type === 'movie'
-        ? `https://player.vidzee.wtf/embed/movie/${id}`
-        : `https://player.vidzee.wtf/embed/tv/${id}/${season}/${episode}`,
-  },
-  {
-    id: 'cinesrc',
-    num: 11,
-    name: 'Cinesrc (Player 11)',
-    badge: 'Pro HD',
-    type: 'embed',
-    getUrl: (id, type, season, episode) =>
-      type === 'movie'
-        ? `https://cinesrc.st/embed/movie/${id}`
-        : `https://cinesrc.st/embed/tv/${id}?s=${season}&e=${episode}`,
-  },
-  {
-    id: 'nontongo',
-    num: 12,
-    name: 'Nontongo (Player 12)',
-    badge: 'Fast Mirror',
-    type: 'embed',
-    getUrl: (id, type, season, episode) =>
-      type === 'movie'
-        ? `https://www.nontongo.win/embed/movie/${id}`
-        : `https://www.nontongo.win/embed/tv/${id}/${season}/${episode}`,
-  },
-];
+export const PLAYER_SOURCES: PlayerSource[] = [];
 
 const EXTRA_SOURCES: PlayerSource[] = [
   {
@@ -126,7 +81,7 @@ export const WatchPage: React.FC = () => {
   const [seasonData, setSeasonData] = useState<SeasonInfo | null>(null);
   const [currentSeason, setCurrentSeason] = useState<number>(initialSeason);
   const [currentEpisode, setCurrentEpisode] = useState<number>(initialEpisode);
-  const [activePlayerId, setActivePlayerId] = useState<string>('player3');
+  const [activePlayerId, setActivePlayerId] = useState<string>('trailer');
 
   const [isIframeLoading, setIsIframeLoading] = useState<boolean>(true);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
@@ -146,6 +101,11 @@ export const WatchPage: React.FC = () => {
 
   // Quick switch to next server
   const handleNextServer = () => {
+    if (PLAYER_SOURCES.length === 0) {
+      setActivePlayerId('trailer');
+      setIsIframeLoading(true);
+      return;
+    }
     const currentIndex = PLAYER_SOURCES.findIndex((s) => s.id === activePlayerId);
     const nextIndex = (currentIndex + 1) % PLAYER_SOURCES.length;
     setActivePlayerId(PLAYER_SOURCES[nextIndex].id);
@@ -296,7 +256,7 @@ export const WatchPage: React.FC = () => {
   };
 
   const title = details?.title || details?.name || 'Now Playing';
-  const activeSource = ALL_SOURCES.find((p) => p.id === activePlayerId) || PLAYER_SOURCES[0];
+  const activeSource = ALL_SOURCES.find((p) => p.id === activePlayerId) || EXTRA_SOURCES[0];
 
   // Resolve active stream URL based on player
   let activeEmbedUrl = '';
