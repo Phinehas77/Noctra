@@ -266,17 +266,17 @@ export const WatchPage: React.FC = () => {
 
   const title = details?.title || details?.name || 'Now Playing';
   const selectedSource = ALL_SOURCES.find((p) => p.id === activePlayerId) || EXTRA_SOURCES[0];
-  const isDirectVideoUrl = /\\.(mp4|webm|m3u8)(\\?.*)?$/i.test(customStreamUrl);
+  const isDirectVideoUrl = /\.(mp4|webm|m3u8)(\?.*)?$/i.test(customStreamUrl);
   const activeSource = activePlayerId === 'custom-embed' && isDirectVideoUrl
     ? { ...selectedSource, type: 'html5' as const }
     : selectedSource;
 
   // Resolve active stream URL based on player
   let activeEmbedUrl = '';
-  if (activeSource.type === 'embed') {
-    activeEmbedUrl = activeSource.getUrl(id, mediaType, currentSeason, currentEpisode);
-  } else if (activePlayerId === 'custom-embed') {
+  if (activePlayerId === 'custom-embed') {
     activeEmbedUrl = customStreamUrl;
+  } else if (activeSource.type === 'embed') {
+    activeEmbedUrl = activeSource.getUrl(id, mediaType, currentSeason, currentEpisode);
   } else if (activeSource.type === 'trailer') {
     const key = details?.trailer_key || 'Way9Dexny3w';
     activeEmbedUrl = `https://www.youtube-nocookie.com/embed/${key}?autoplay=1&rel=0&modestbranding=1`;
@@ -352,7 +352,7 @@ export const WatchPage: React.FC = () => {
                 <span>Streaming Servers (HD · Ultra Fast):</span>
               </span>
               <span className="hidden md:inline text-[11px] text-[#A3A6B0] font-tech">
-                4 Dedicated Verified Players (3, 6, 11, 12)
+                Official trailers · Your authorized player URL
               </span>
             </div>
 
@@ -403,6 +403,7 @@ export const WatchPage: React.FC = () => {
                 onClick={() => {
                   if (customStreamUrl) {
                     setActivePlayerId('custom-embed');
+                    setIsIframeLoading(true);
                   } else {
                     setShowCustomModal(true);
                   }
