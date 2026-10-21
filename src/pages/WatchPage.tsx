@@ -48,6 +48,14 @@ export const PLAYER_SOURCES: PlayerSource[] = [];
 
 const EXTRA_SOURCES: PlayerSource[] = [
   {
+    id: 'custom-embed',
+    num: 15,
+    name: 'External Player',
+    badge: 'Embed URL',
+    type: 'embed',
+    getUrl: () => '',
+  },
+  {
     id: 'trailer',
     num: 13,
     name: 'Official HD Trailer',
@@ -251,7 +259,8 @@ export const WatchPage: React.FC = () => {
       title: details.title || details.name || '',
     });
     setCustomStreamUrl(customInputUrl.trim());
-    setActivePlayerId('direct');
+    setActivePlayerId('custom-embed');
+    setIsIframeLoading(true);
     setShowCustomModal(false);
   };
 
@@ -262,6 +271,8 @@ export const WatchPage: React.FC = () => {
   let activeEmbedUrl = '';
   if (activeSource.type === 'embed') {
     activeEmbedUrl = activeSource.getUrl(id, mediaType, currentSeason, currentEpisode);
+  } else if (activePlayerId === 'custom-embed') {
+    activeEmbedUrl = customStreamUrl;
   } else if (activeSource.type === 'trailer') {
     const key = details?.trailer_key || 'Way9Dexny3w';
     activeEmbedUrl = `https://www.youtube-nocookie.com/embed/${key}?autoplay=1&rel=0&modestbranding=1`;
@@ -387,7 +398,7 @@ export const WatchPage: React.FC = () => {
               <button
                 onClick={() => {
                   if (customStreamUrl) {
-                    setActivePlayerId('direct');
+                    setActivePlayerId('custom-embed');
                   } else {
                     setShowCustomModal(true);
                   }
@@ -397,10 +408,10 @@ export const WatchPage: React.FC = () => {
                     ? 'bg-[#FF5500] text-white border-[#FF5500] font-bold shadow-sm'
                     : 'bg-[#17191F] hover:bg-[#222632] text-zinc-300 hover:text-white border-white/10'
                 }`}
-                title="Play custom stream URL (m3u8/mp4)"
+                title="Play an authorized external player embed URL"
               >
                 <Sparkles className="w-3 h-3" />
-                <span>Custom Stream</span>
+                <span>External Player</span>
               </button>
             </div>
           </div>
@@ -450,7 +461,7 @@ export const WatchPage: React.FC = () => {
                   onClick={() => setShowCustomModal(true)}
                   className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold"
                 >
-                  <Sparkles className="w-3.5 h-3.5 inline mr-1.5" /> Add Video URL
+                  <Sparkles className="w-3.5 h-3.5 inline mr-1.5" /> Add Player URL
                 </button>
               </div>
             </div>
@@ -505,9 +516,9 @@ export const WatchPage: React.FC = () => {
                   <div className="w-14 h-14 rounded-2xl bg-[#17191F] border border-white/10 flex items-center justify-center text-[#E50914] mx-auto mb-4">
                     <Film className="w-7 h-7" />
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">No Direct Stream Configured</h3>
+                  <h3 className="text-lg font-bold text-white mb-2">No Video Source Configured</h3>
                   <p className="text-xs text-[#A3A6B0] mb-4">
-                    No streaming provider is connected yet. Add a direct MP4 or browser-compatible HLS URL that you own or are authorized to use.
+                    Add an MP4/HLS video URL or an external player embed URL that you own or are authorized to use.
                   </p>
                   <div className="flex items-center justify-center gap-3">
                     <button
@@ -693,7 +704,7 @@ export const WatchPage: React.FC = () => {
           <div className="bg-[#111318] border border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-white mb-2">Set Custom Video URL</h3>
             <p className="text-xs text-[#A3A6B0] mb-4">
-              Enter a direct MP4, WebM, or HLS stream URL to play with the native HTML5 player.
+              Enter a direct MP4/WebM/HLS URL, or an external player embed URL you are authorized to use. Some providers block embedding.
             </p>
             <form onSubmit={handleSaveCustomSource} className="space-y-4">
               <input
@@ -701,7 +712,7 @@ export const WatchPage: React.FC = () => {
                 required
                 value={customInputUrl}
                 onChange={(e) => setCustomInputUrl(e.target.value)}
-                placeholder="https://example.com/video.mp4"
+                placeholder="https://player.example.com/embed/..."
                 className="w-full bg-[#17191F] border border-white/10 text-xs text-white rounded-lg p-2.5 focus:border-[#E50914] focus:outline-none"
               />
               <div className="flex items-center justify-end gap-3 pt-2">
